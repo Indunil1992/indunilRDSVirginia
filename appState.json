@@ -23,7 +23,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "indunilRDSVirginia/lambda.js",
-        "code": "let SL_AWS = require('slappforge-sdk-aws');\nlet connectionManager = require('./ConnectionManager');\nconst rds = new SL_AWS.RDS(connectionManager);\n\nexports.handler = function (event, context, callback) {\n\n\n    // You must always end/destroy the DB connection after it's used\n    rds.beginTransaction({\n        instanceIdentifier: 'instance'\n    }, function (error, connection) {\n        if (error) {\n            throw error;\n        }\n    });\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
+        "code": "let SL_AWS = require('slappforge-sdk-aws');\nlet connectionManager = require('./ConnectionManager');\nconst rds = new SL_AWS.RDS(connectionManager);\n\n\nexports.handler = function (event, context, callback) {\n\n    // You must always end/destroy the DB connection after it's used\n    rds.beginTransaction({\n        instanceIdentifier: 'RDSinstance'\n    }, function (error, connection) {\n        if (error) {\n            throw error;\n        }\n    });\n\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -42,10 +42,12 @@
         "children": [],
         "isRemovable": true,
         "filePath": "indunilRDSVirginia/ConnectionManager.js",
-        "code": "module.exports = function() {\n    this.dbConnections = [];\n\n    this.dbConnections[\"instance\"] = {\n        host: process.env.EndPoint_rdsInstance,\n        port: process.env.Port_rdsInstance,\n        user: process.env.User_rdsInstance,\n        password: process.env.Password_rdsInstance,\n        database: \"indunil\"\n    };\n};"
+        "code": "module.exports = function() {\n    this.dbConnections = [];\n\n    this.dbConnections[\"instance\"] = {\n        host: process.env.EndPoint_rdsInstance,\n        port: process.env.Port_rdsInstance,\n        user: process.env.User_rdsInstance,\n        password: process.env.Password_rdsInstance,\n        database: \"indunil\"\n    };\n    this.dbConnections[\"indunil\"] = {\n        host: process.env.EndPoint_rdsIndunil,\n        port: process.env.Port_rdsIndunil,\n        user: process.env.User_rdsIndunil,\n        password: process.env.Password_rdsIndunil,\n        database: \"indunil\"\n    };\n    this.dbConnections[\"RDSinstance\"] = {\n        host: process.env.EndPoint_rdsRDSinstance,\n        port: process.env.Port_rdsRDSinstance,\n        user: process.env.User_rdsRDSinstance,\n        password: process.env.Password_rdsRDSinstance,\n        database: \"indunil\"\n    };\n};"
       }
     },
-    "deletedFiles": [],
+    "deletedFiles": [
+      "indunilRDSVirginia/lam.js"
+    ],
     "rootNode": "01b43913-b6de-4113-9c48-567eefdc19a6",
     "openFiles": [
       "e8d3cac4-8c9e-4196-8038-75a0b51a58c7"
@@ -79,6 +81,90 @@
             "Host": "",
             "doesExist": false,
             "initializationQuery": "dd",
+            "alreadyDeployed": false
+          },
+          "rdsInstanceResources": [],
+          "projectRegion": "us-east-1",
+          "mode": 0,
+          "additionalFiles": [],
+          "params": {
+            "query": "",
+            "inserts": ""
+          },
+          "isGlobalEditMode": false,
+          "enableInject": true,
+          "isNewFromGlobal": false
+        }
+      },
+      "rds-indunil": {
+        "name": "rds-indunil",
+        "type": "RDS",
+        "config": {
+          "editMode": false,
+          "operation": 1,
+          "rdsInstance": {
+            "rdsEngineType": "mysql",
+            "rdsEdition": "",
+            "rdsInstanceSpec": {
+              "dbInstanceClass": "db.t2.micro",
+              "dbLicenseModel": "general-public-license",
+              "dbEngineVersion": "5.7.19"
+            },
+            "rdsSetting": {
+              "instanceIdentifier": "indunil",
+              "masterUsername": "indunil",
+              "masterPassword": "Sachithra142"
+            },
+            "rdsDBOptions": {
+              "dbName": "indunil",
+              "dbPort": "3306"
+            },
+            "rdsInstanceArn": "",
+            "Host": "",
+            "doesExist": false,
+            "initializationQuery": "CREATE TABLE Persons (\n    PersonID int,\n    LastName varchar(255),\n    FirstName varchar(255),\n    Address varchar(255),\n    City varchar(255) \n);\n",
+            "alreadyDeployed": false
+          },
+          "rdsInstanceResources": [],
+          "projectRegion": "us-east-1",
+          "mode": 0,
+          "additionalFiles": [],
+          "params": {
+            "query": "",
+            "inserts": ""
+          },
+          "isGlobalEditMode": false,
+          "enableInject": true,
+          "isNewFromGlobal": false
+        }
+      },
+      "rds-RDSinstance": {
+        "name": "rds-RDSinstance",
+        "type": "RDS",
+        "config": {
+          "editMode": false,
+          "operation": 1,
+          "rdsInstance": {
+            "rdsEngineType": "mysql",
+            "rdsEdition": "",
+            "rdsInstanceSpec": {
+              "dbInstanceClass": "db.t2.micro",
+              "dbLicenseModel": "general-public-license",
+              "dbEngineVersion": "5.7.19"
+            },
+            "rdsSetting": {
+              "instanceIdentifier": "RDSinstance",
+              "masterUsername": "indunil",
+              "masterPassword": "Sachithra142"
+            },
+            "rdsDBOptions": {
+              "dbName": "indunil",
+              "dbPort": "3306"
+            },
+            "rdsInstanceArn": "",
+            "Host": "",
+            "doesExist": false,
+            "initializationQuery": "CREATE TABLE Persons (\n    PersonID int,\n    LastName varchar(255),\n    FirstName varchar(255),\n    Address varchar(255),\n    City varchar(255) \n);",
             "alreadyDeployed": false
           },
           "rdsInstanceResources": [],
@@ -128,7 +214,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1562236854145
+    "lastSave": 1562240417236
   },
   "VCS_STATE": {
     "provider": "GitHub",
